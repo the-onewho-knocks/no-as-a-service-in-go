@@ -14,14 +14,14 @@ import (
 	"golang.org/x/time/rate"
 )
 
-// ---------- Config ----------
+
 const (
 	defaultPort = "8080"
 
 	requestsPerMinute = 120
 )
 
-// ---------- Rate Limiter ----------
+
 type clientLimiter struct {
 	limiter  *rate.Limiter
 	lastSeen time.Time
@@ -49,7 +49,6 @@ func getLimiter(ip string) *rate.Limiter {
 	return limiter
 }
 
-// Cleanup old IPs (memory hygiene)
 func cleanupClients() {
 	for {
 		time.Sleep(time.Minute)
@@ -63,7 +62,6 @@ func cleanupClients() {
 	}
 }
 
-// ---------- Utils ----------
 func getClientIP(r *http.Request) string {
 	if cfIP := r.Header.Get("CF-Connecting-IP"); cfIP != "" {
 		return cfIP
@@ -76,11 +74,10 @@ func getClientIP(r *http.Request) string {
 	return ip
 }
 
-// ---------- Main ----------
+
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	// Load reasons.json
 	file, err := os.ReadFile("./no.json")
 	if err != nil {
 		log.Fatal("Failed to read reasons.json:", err)
